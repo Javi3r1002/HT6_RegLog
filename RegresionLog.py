@@ -295,5 +295,155 @@ for row in H['SalePrice']:
     if row in Cluster_bajo : Cate.append(1)
     elif row in Cluster_medio:   Cate.append(0)
     elif row in Cluster_alto:  Cate.append(0)
+    
+    else:
+    	print('dndofinoid')
+H['Categoria'] = Cate
+H = H.drop(['SalePrice'], axis = 1)
+
+
+print(H.groupby('Categoria').size())
+H['Categoria'] = H['Categoria'].astype('category')
+
+
+y = H.pop("Categoria") #La variable respuesta
+X = H #El resto de los datos
+
+random.seed(123)
+
+X_train, X_test,y_train, y_test = train_test_split(X, y,test_size=0.3,train_size=0.7, random_state = 123)
+
+logReg = LogisticRegression(solver='liblinear',random_state=0)
+start = timeit.default_timer()
+logReg.fit(X_train,y_train)
+end = timeit.default_timer()
+print('Tiempo de fit del modelo para casas baratas: ',  end-start)
+y_predf = logReg.predict(X_train)
+start = timeit.default_timer()
+y_pred = logReg.predict(X_test)
+#X_test = np.array(X_test)
+#y_pred = X_test * logReg.coef_ + logReg.intercept_
+end = timeit.default_timer()
+print('Tiempo de predict del modelo para casas baratas: ',  end-start)
+
+
+X_test = np.array(X_test)
+start = timeit.default_timer()
+y_proba = logReg.predict_proba(X_test)[:,1]
+end = timeit.default_timer()
+print('Tiempo de Proba del modelo para casas baratas: ',  end-start)
+cm = confusion_matrix(y_test,y_pred)
+
+print ("Accuracy entrenamiento para el modelo de casas baratas:",metrics.accuracy_score(y_train, y_predf))
+print ("Accuracy para el modelo de casas baratas:",metrics.accuracy_score(y_test, y_pred))
+print ("Precision:", metrics.precision_score(y_test,y_pred,average='weighted') )
+print ("Recall: ", metrics.recall_score(y_test,y_pred,average='weighted'))
+
+matrix = confusion_matrix(y_test, y_pred)
+
+print("Matriz de confusión del modelo para casas baratas", '\n', matrix)
+
+
+#Modelo casas de valor intermedio
+H = G
+Cate = []
+for row in H['SalePrice']:
+    if row in Cluster_bajo : Cate.append(0)
+    elif row in Cluster_medio:   Cate.append(1)
+    elif row in Cluster_alto:  Cate.append(0)
 
     
+    else:
+        print('dndofinoid')
+H['Categoria'] = Cate
+H = H.drop(['SalePrice'], axis = 1)
+
+
+print(H.groupby('Categoria').size())
+H['Categoria'] = H['Categoria'].astype('category')
+
+
+y = H.pop("Categoria") #La variable respuesta
+X = H #El resto de los datos
+
+random.seed(123)
+
+X_train, X_test,y_train, y_test = train_test_split(X, y,test_size=0.3,train_size=0.7, random_state = 123)
+
+logReg = LogisticRegression(solver='liblinear',random_state=0)
+start = timeit.default_timer()
+logReg.fit(X_train,y_train)
+end = timeit.default_timer()
+print('Tiempo de Fit del modelo para casas intermedias: ',  end-start)
+
+y_predf = logReg.predict(X_train)
+start = timeit.default_timer()
+y_pred = logReg.predict(X_test)
+end = timeit.default_timer()
+print('Tiempo de predict del modelo para casas intermedias: ',  end-start)
+start = timeit.default_timer()
+y_proba = logReg.predict_proba(X)[:,1]
+end = timeit.default_timer()
+print('Tiempo de Proba del modelo para casas intermedias: ',  end-start)
+cm = confusion_matrix(y_test,y_pred)
+
+print ("Accuracy entrenamiento para el modelo de casas intermedio:",metrics.accuracy_score(y_train, y_predf))
+print ("Accuracy para el modelo de casas intermedio:",metrics.accuracy_score(y_test, y_pred))
+print ("Precision:", metrics.precision_score(y_test,y_pred,average='weighted') )
+print ("Recall: ", metrics.recall_score(y_test,y_pred,average='weighted'))
+
+matrix = confusion_matrix(y_test, y_pred)
+
+print("Matriz de confusión del modelo para casas intermedias", '\n',matrix)
+
+#Modelo casas de valor caro
+H = G
+Cate = []
+for row in H['SalePrice']:
+    if row in Cluster_bajo : Cate.append(0)
+    elif row in Cluster_medio:   Cate.append(0)
+    elif row in Cluster_alto:  Cate.append(1)
+
+    
+    else:
+        print('dndofinoid')
+H['Categoria'] = Cate
+H = H.drop(['SalePrice'], axis = 1)
+
+
+print(H.groupby('Categoria').size())
+H['Categoria'] = H['Categoria'].astype('category')
+
+
+y = H.pop("Categoria") #La variable respuesta
+X = H #El resto de los datos
+
+random.seed(123)
+
+X_train, X_test,y_train, y_test = train_test_split(X, y,test_size=0.3,train_size=0.7, random_state = 123)
+
+logReg = LogisticRegression(solver='liblinear',random_state=0)
+start = timeit.default_timer()
+logReg.fit(X_train,y_train)
+end = timeit.default_timer()
+print('Tiempo de Fit del modelo para casas caras: ',  end-start)
+
+y_predf = logReg.predict(X_train)
+start = timeit.default_timer()
+y_pred = logReg.predict(X_test)
+end = timeit.default_timer()
+print('Tiempo de predict del modelo para casas caras: ',  end-start)
+start = timeit.default_timer()
+y_proba = logReg.predict_proba(X)[:,1]
+end = timeit.default_timer()
+print('Tiempo de Proba del modelo para casas caras: ',  end-start)
+cm = confusion_matrix(y_test,y_pred)
+
+print ("Accuracy entrenamiento para el modelo de casas caras:",metrics.accuracy_score(y_train, y_predf))
+print ("Accuracy para el modelo de casas caras:",metrics.accuracy_score(y_test, y_pred))
+print ("Precision:", metrics.precision_score(y_test,y_pred,average='weighted') )
+print ("Recall: ", metrics.recall_score(y_test,y_pred,average='weighted'))
+
+matrix = confusion_matrix(y_test, y_pred)
+
+print("Matriz de confusión del modelo para casas caras", '\n',matrix)
